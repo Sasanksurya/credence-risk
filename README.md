@@ -4,6 +4,20 @@ A Streamlit application for scoring, validating and explaining a credit-risk mod
 
 This is a portfolio demonstration. It does not approve, reject or recommend lending decisions, and it has not been assessed for fairness, regulatory compliance or production readiness.
 
+## Screenshots
+
+| Overview | Applicant Scoring |
+|---|---|
+| ![Overview](docs/screenshots/01-overview.png) | ![Applicant Scoring](docs/screenshots/02-applicant-scoring.png) |
+
+| Batch Scoring | Statistical Analysis |
+|---|---|
+| ![Batch Scoring](docs/screenshots/03-batch-scoring.png) | ![Statistical Analysis](docs/screenshots/04-statistical-analysis.png) |
+
+| Model Validation | Explainability |
+|---|---|
+| ![Model Validation](docs/screenshots/05-model-validation.png) | ![Explainability](docs/screenshots/06-explainability.png) |
+
 ## Problem statement
 
 Lenders need to rank applicants by the likelihood of repayment difficulty and to understand how reliable that ranking is. The positive class is rare (about 8% of applicants), so the project emphasises ranking quality (ROC-AUC, Average Precision), threshold trade-offs, calibration limits and explainability, not accuracy.
@@ -97,6 +111,7 @@ Credence Risk/
 ├── reports/                     Generated validation, statistics and SHAP summaries
 ├── scripts/                     Report builders and sample-data helper
 ├── tests/                       pytest suite (synthetic fixtures)
+├── docs/screenshots/            README screenshots
 ├── .streamlit/config.toml       Theme and upload limit
 ├── datasets/                    Home Credit CSV files (not committed)
 ├── samples/                     Generated sample CSV (not committed)
@@ -152,68 +167,4 @@ python scripts\build_validation_artifacts.py
 python scripts\build_explainability_artifacts.py
 ```
 
-The first script recomputes the saved ROC-AUC and Average Precision and stops without writing anything if they do not match `models/model_metrics.json`.
-
-## Run the app
-
-```powershell
-python -m streamlit run app/main.py
-```
-
-The app opens at `http://localhost:8501`.
-
-## Run the tests
-
-```powershell
-python -m pytest -v
-```
-
-The suite uses a small synthetic model and does not load the full dataset. Two tests also check the real saved model and skip themselves if the model or dataset is missing.
-
-## Configuration
-
-Settings are read from `.env` (copy of `.env.example`). Only variables the app uses are listed there.
-
-| Variable | Default | Purpose |
-|---|---|---|
-| `APP_TITLE` | `Credence Risk` | Browser tab title |
-| `MODELS_DIR` | `models` | Location of model artifacts |
-| `REPORTS_DIR` | `reports` | Location of generated reports |
-| `RISK_BAND_THRESHOLDS` | `0.10,0.30,0.50` | Illustrative band cut-offs |
-| `MAX_UPLOAD_MB` | `20` | Batch upload size limit |
-| `MAX_UPLOAD_ROWS` | `50000` | Batch upload row limit |
-
-If you raise the upload limit, also raise `maxUploadSize` in `.streamlit/config.toml`. The app makes no external API calls and stores no uploaded data.
-
-## Preparing input CSV files for Batch Scoring
-
-1. Open the Batch Scoring page and select **Download CSV template**. It lists the 120 required input columns plus an optional `SK_ID_CURR`.
-2. Fill one row per applicant. Column names must match exactly. Order does not matter.
-3. Leave unknown values blank. The saved model fills them with training medians or most frequent values.
-4. Do not include the three ratio columns. The app calculates them.
-5. `SK_ID_CURR` and `TARGET`, if present, are never used as model inputs. Extra columns are kept in the download but not used.
-6. Save as CSV (UTF-8). The file must be under the size and row limits.
-
-Non-numeric values in numeric columns are treated as missing, and categories the model has not seen are ignored by the encoder. Both are reported as warnings.
-
-To try it with real rows, `python scripts\make_sample_csv.py` creates `samples/sample_applicants.csv` (200 applicants, no `TARGET`).
-
-## Example workflow
-
-1. Run the app and open **Batch Scoring**.
-2. Upload `samples/sample_applicants.csv` and select **Score all applicants**.
-3. Review the band distribution and preview, then download `scored_applicants.csv`. It contains your original columns plus `Predicted_Probability` and `Risk_Band`.
-4. Open **Explainability**, upload the same file, and choose a row to see which features raised or lowered that applicant's score.
-5. Read **Model Validation** to see how far to trust the scores.
-
-## Limitations and responsible use
-
-- Application-level features only. The Home Credit historical tables are not used.
-- Probabilities are not calibrated. Class weighting inflates them, so they are not default rates.
-- Risk bands are illustrative and have no policy standing.
-- Validation is a single 80/20 split, with no confidence intervals, cross-validated spread or out-of-time test.
-- Single-applicant scoring uses a form of the most informative inputs, and every other input is imputed. Batch scoring with complete records is more faithful to the model.
-- The `DAYS_EMPLOYED` placeholder issue described above affects the model and its explanations.
-- Statistical and SHAP results describe associations in historical data, not causes.
-- No fairness, bias, stability, privacy or regulatory assessment has been performed. Do not use this application to make or support real lending decisions.
-- The data is a public, anonymised competition dataset, so results do not transfer to any real lending portfolio.
+The first script recomputes the saved ROC-AUC and Average Precision and stops without writing anything if they do not match
