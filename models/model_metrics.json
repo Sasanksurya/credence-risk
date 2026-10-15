@@ -1,0 +1,10 @@
+{
+    "model": "Tuned Logistic Regression",
+    "best_parameters": {
+        "classifier__C": 1.0
+    },
+    "roc_auc": 0.7492977746485827,
+    "average_precision": 0.22854958829150906,
+    "validation_rows": 61503,
+    "random_state": 42
+}

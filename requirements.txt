@@ -1,0 +1,12 @@
+# Tested with Python 3.13. The saved model requires scikit-learn 1.6.1 exactly.
+scikit-learn==1.6.1
+pandas>=2.2,<3
+numpy>=2.0
+scipy>=1.13
+joblib>=1.4
+streamlit>=1.40
+plotly>=6.0
+python-dotenv>=1.0
+# Used only by scripts/build_explainability_artifacts.py to cross-check SHAP values
+shap>=0.46
+pytest>=8.0
