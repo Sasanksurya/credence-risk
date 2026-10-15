@@ -4,6 +4,8 @@ A Streamlit application for scoring, validating and explaining a credit-risk mod
 
 This is a portfolio demonstration. It does not approve, reject or recommend lending decisions, and it has not been assessed for fairness, regulatory compliance or production readiness.
 
+**Live demo:** [https://credence-risk-dvo2miujc7hu6mvhucb6bd.streamlit.app/](https://credence-risk-dvo2miujc7hu6mvhucb6bd.streamlit.app/)
+
 ## Screenshots
 
 | Overview | Applicant Scoring |
